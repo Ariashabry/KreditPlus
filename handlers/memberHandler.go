@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"github.com/ariashabry/TechnicalTest/models"
+	"github.com/ariashabry/KreditPlus/models"
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 	"log"
@@ -10,7 +10,7 @@ import (
 )
 
 func (c *Context) GetAllMember(ctx echo.Context) error {
-	m := models.Members{}
+	m := models.Konsumens{}
 
 	err := m.GetAll(c.DB)
 
@@ -21,7 +21,7 @@ func (c *Context) GetAllMember(ctx echo.Context) error {
 			Code:    http.StatusInternalServerError,
 			Message: "Failed getting data",
 		}
-		log.Println("Error getting data members:", err.Error)
+		log.Println("Error getting data konsumens:", err.Error())
 		return ctx.JSON(http.StatusInternalServerError, Results)
 	}
 
@@ -44,8 +44,8 @@ func (c *Context) GetAllMember(ctx echo.Context) error {
 	}
 }
 
-func (c *Context) InsertMember(ctx echo.Context) error {
-	m := models.Member{}
+func (c *Context) InsertKonsumen(ctx echo.Context) error {
+	m := models.Konsumen{}
 	err := ctx.Bind(&m)
 	if err != nil {
 		Results := &Result{
@@ -54,7 +54,7 @@ func (c *Context) InsertMember(ctx echo.Context) error {
 			Code:    http.StatusBadRequest,
 			Message: "Failed send data",
 		}
-		log.Println("Error creating member:", err.Error)
+		log.Println("Error creating new konsumen:", err.Error())
 		return ctx.JSON(http.StatusBadRequest, Results)
 	}
 
@@ -76,14 +76,14 @@ func (c *Context) InsertMember(ctx echo.Context) error {
 		Success: true,
 		Data:    m,
 		Code:    http.StatusCreated,
-		Message: "Success adding data member",
+		Message: "Success adding new konsumen",
 	}
 	return ctx.JSON(http.StatusCreated, Results)
 }
 
-func (c *Context) UpdateMember(ctx echo.Context) error {
+func (c *Context) UpdateKonsumen(ctx echo.Context) error {
 	//get from request
-	m := models.Member{}
+	m := models.Konsumen{}
 	err := ctx.Bind(&m)
 	if err != nil {
 		Results := &Result{
@@ -92,13 +92,13 @@ func (c *Context) UpdateMember(ctx echo.Context) error {
 			Code:    http.StatusBadRequest,
 			Message: "Failed send data",
 		}
-		log.Println("Error creating member:", err.Error)
+		log.Println("Error creating member:", err.Error())
 		return ctx.JSON(http.StatusBadRequest, Results)
 	}
 
 	//check data to db using id from request
-	mdb := models.Member{}
-	err = mdb.GetById(c.DB, int(m.IdMember))
+	mdb := models.Konsumen{}
+	err = mdb.GetById(c.DB, int(m.IdKonsumen))
 
 	//check error
 	if err != nil {
@@ -112,9 +112,13 @@ func (c *Context) UpdateMember(ctx echo.Context) error {
 	}
 
 	//ganti data yang mau diupdate
-	mdb.Username = m.Username
-	mdb.SkinColor = m.SkinColor
-	mdb.SkinType = m.SkinType
+	mdb.FullName = m.FullName
+	mdb.LegalName = m.LegalName
+	mdb.TempatLahir = m.TempatLahir
+	mdb.TanggalLahir = m.TanggalLahir
+	mdb.Gaji = m.Gaji
+	mdb.FotoKTP = m.FotoKTP
+	mdb.FotoSelfie = m.FotoSelfie
 	mdb.Gender = m.Gender
 
 	//lakukan update
@@ -140,12 +144,12 @@ func (c *Context) UpdateMember(ctx echo.Context) error {
 	return ctx.JSON(http.StatusCreated, Results)
 }
 
-func (c *Context) DeleteMember(ctx echo.Context) error {
+func (c *Context) DeleteKonsumen(ctx echo.Context) error {
 	//get parameter
 	id, _ := strconv.Atoi(ctx.Param("id"))
 
 	//get data from db using id
-	m := models.Member{}
+	m := models.Konsumen{}
 	err := m.GetById(c.DB, id)
 
 	//cek apakah user tersebut ada atau tidak

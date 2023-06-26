@@ -20,13 +20,14 @@ type Result struct {
 func (c *Context) Api(group string) {
 	public := c.Echo.Group(group)
 	{
-		public.POST("/member", c.InsertMember)
-		public.PUT("/member", c.UpdateMember)
-		public.DELETE("/member/:id", c.DeleteMember)
-		public.GET("/member", c.GetAllMember)
-		public.GET("/product/:id", c.GetProductById)
-		public.POST("/like", c.InsertLikeReview)
-		public.DELETE("/cancel-like", c.DeleteLikeReview)
+		public.POST("/konsumen", c.InsertKonsumen)
+		public.PUT("/konsumen", c.UpdateKonsumen)
+		public.DELETE("/konsumen/:id", c.DeleteKonsumen)
+		public.GET("/konsumen", c.GetAllMember)
+		public.POST("/pinjam", c.Pinjam)
+		public.PUT("/approve/:id", c.UpdatePinjam)
+		public.GET("/konsumen/:id", c.SeeStatus)
+		public.POST("/payment/:id", c.Pinjam)
 	}
 
 }

@@ -1,4 +1,4 @@
-module github.com/ariashabry/TechnicalTest
+module github.com/ariashabry/KreditPlus
 
 go 1.18
 

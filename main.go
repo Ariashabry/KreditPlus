@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/ariashabry/TechnicalTest/handlers"
-	"github.com/ariashabry/TechnicalTest/helpers/env"
-	"github.com/ariashabry/TechnicalTest/models"
+	"github.com/ariashabry/KreditPlus/handlers"
+	"github.com/ariashabry/KreditPlus/helpers/env"
+	"github.com/ariashabry/KreditPlus/models"
 	"github.com/labstack/echo/v4"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
