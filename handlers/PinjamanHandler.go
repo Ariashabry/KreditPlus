@@ -256,47 +256,58 @@ func (c *Context) PayMent(ctx echo.Context) error {
 		pdb.TotalDebt += pu.Amount
 	}
 
-	// Simpan data pembayaran ke database
-	transaction := &models.Transaction{
-		LoanID:      uint(loanID),
-		UserID:      pdb.UserID,
-		Amount:      pu.Amount,
-		PaymentDate: time.Now(),
-	}
+	// Membuat channel untuk mengirim sinyal pembayaran selesai
+	done := make(chan bool)
 
-	err = transaction.Create(c.DB)
-	//cek error
-	if err != nil {
+	// Goroutine untuk menjalankan proses pembayaran
+	go func() {
+		defer close(done) // Menutup channel setelah proses selesai
+
+		// Simpan data pembayaran ke database
+		transaction := &models.Transaction{
+			LoanID:      uint(loanID),
+			UserID:      pdb.UserID,
+			Amount:      pu.Amount,
+			PaymentDate: time.Now(),
+		}
+
+		err = transaction.Create(c.DB)
+		//cek error
+		if err != nil {
+			log.Println("Payment Failed", err.Error())
+			done <- false //mengirim sinyal gagal
+			return
+		}
+
+		err = pdb.Update(c.DB)
+
+		//cek error
+		if err != nil {
+			log.Println("Payment Failed", err.Error())
+			done <- false // Mengirim sinyal gagal
+			return
+		}
+		done <- true // Mengirim sinyal pembayaran berhasil ke channel
+	}()
+	// Menunggu sinyal pembayaran selesai
+	success := <-done
+
+	if success {
+		Results := &Result{
+			Success: true,
+			Data:    pdb,
+			Code:    http.StatusCreated,
+			Message: "Success request a loan",
+		}
+		return ctx.JSON(http.StatusCreated, Results)
+	} else {
 		Results := &Result{
 			Success: false,
 			Data:    nil,
 			Code:    http.StatusInternalServerError,
 			Message: "Payment Failed",
 		}
-		log.Println("Payment Failed", err.Error())
 		return ctx.JSON(http.StatusInternalServerError, Results)
 	}
-
-	err = pdb.Update(c.DB)
-
-	//cek error
-	if err != nil {
-		Results := &Result{
-			Success: false,
-			Data:    nil,
-			Code:    http.StatusInternalServerError,
-			Message: "Payment Failed",
-		}
-		log.Println("Payment Failed", err.Error())
-		return ctx.JSON(http.StatusInternalServerError, Results)
-	}
-
-	Results := &Result{
-		Success: true,
-		Data:    pdb,
-		Code:    http.StatusCreated,
-		Message: "Success request a loan",
-	}
-	return ctx.JSON(http.StatusCreated, Results)
 
 }

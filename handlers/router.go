@@ -28,6 +28,7 @@ func (c *Context) Api(group string) {
 		public.PUT("/approve/:id", c.UpdatePinjam)
 		public.GET("/konsumen/:id", c.SeeStatus)
 		public.POST("/payment/:id", c.Pinjam)
+		public.POST("/paymentloan/:id", c.PayMent)
 	}
 
 }
