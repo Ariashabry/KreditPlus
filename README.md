@@ -80,6 +80,8 @@ Project ini hanya simulasi dan cuma memuat MVP
 7. Untuk ERD
 ![ERD](https://github.com/Ariashabry/KreditPlus/blob/main/results/erd.jpg?raw=true)
 
+8. Untuk Dockerfile 
+- file : ./DockerFile
 
 Jika ada pertanyaan, silahkan hubungi saya di : aria.shabry@gmail.com
 
