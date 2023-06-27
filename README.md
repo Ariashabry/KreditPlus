@@ -72,10 +72,13 @@ Project ini hanya simulasi dan cuma memuat MVP
 - Dimana :id merupakan id pinjaman
 - ./handlers/pinjamanHandler.go
 - nama function : func (c *Context) PayMent(ctx echo.Context) error {}
+![Concurrency](https://github.com/Ariashabry/KreditPlus/blob/main/results/concurrency.png?raw=true)
+
 
 6. Penerapan Unit Test
 - Unit Test diterapkan pada function payment
 - file : ./handlers/payment_test.go
+  ![UnitTest](https://github.com/Ariashabry/KreditPlus/blob/main/results/unittest.png?raw=true)
 
 7. Untuk ERD
 ![ERD](https://github.com/Ariashabry/KreditPlus/blob/main/results/erd.jpg?raw=true)
